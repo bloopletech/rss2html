@@ -1,0 +1,53 @@
+body { min-height: 100%; font-family: Verdana, "Trebuchet MS", Helvicita, Arial, sans-serif; font-size: 95%;
+ background-color: #ffffff; color: #000000; padding: 0px; margin: 0px; margin-bottom: 10px;
+  background-image: url(images/back.png); }
+hr { border: none; height: 1px; background-color: #808080; margin: 5px 0; }
+hr.p-after { margin-bottom: 1.1em; }
+form { padding: 0px; margin: 0px; }
+
+.header { text-align: center; padding-top: 17px; /*padding-left: 110px;*/ height: 90px;
+ background: url(images/top1.png) repeat-x; }
+
+.shoutboxcon { float: right; margin-top: 25px; margin-right: 17px; padding-bottom: 10px; z-index: 5;
+  color: #000000; padding: 5px; background-color: #cccccc; text-align: left; position: absolute; right: 0; }
+
+.mast { font-size: 105%; margin-top: 0px; }
+form > .mast { font-size: 110%; }
+.mainbody { padding-left: 1em; padding-right: 1em; }
+
+.footer { background-color: #ffffaa; padding: 3px; }
+
+img { border: 0px; }
+h3, h4 { font-size: 100%; font-weight: bold; margin: 0 0 1em 0; padding: 0; }
+h4 { font-weight: bold; }
+
+table { border: 1px solid #000000; border-collapse: collapse; }
+table td, table th { padding: 0.2em 0.3em; border: 1px solid #000000; vertical-align: top; }
+
+table#urls { margin-bottom: 1em; }
+
+form table { border: none; border-collapse: collapse; }
+form table tr { border: none; }
+form table td { border: none; border-bottom: 1px dotted #808080; padding-bottom: 0.5em; padding-top: 0.5em; }
+form table td.l { width: 12em; }
+form table input.text { width: 30em; }
+form table input.num { width: 3em; }
+form table textarea { width: 97%; height: 6em; }
+td > textarea { width: 100%; }
+td p { margin-top: 0em; }
+
+.clear { clear: both; }
+.lfloat { float: left; margin-top: 0.5em; }
+.rfloat { float: right; margin-top: 0.5em; }
+
+#advtitle, #advicon, #advshow, #advstrip, #advembed, #advforce, #advfix, #advnocache { display: none; }
+
+#codeoutwrap, #stylingwrap { display: none; }
+
+div > #submit { font-size: large; }
+div > #showopt { font-size: large; }
+div > #reset { font-size: large; }
+
+#shoutbox { display: none; border: 1px solid #000000; background-color: #ffffff; margin-top: 0.5em; }
+
+.rss2html-note { display: none; }
