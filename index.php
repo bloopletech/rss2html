@@ -1,7 +1,8 @@
 <?
 set_time_limit(240);
 ini_set("default_socket_timeout", 120);
-ini_set("display_errors", "0");
+#ini_set("display_errors", "0");
+ini_set("display_errors", "1");
 set_magic_quotes_runtime(0);
 
 if(isset($_GET["url"]))
@@ -41,6 +42,19 @@ if(isset($_GET["url"]))
    $forceutf8 = (isset($_GET["forceutf8"]) ? ($_GET["forceutf8"] == "true") : false);
    $cache = !(isset($_GET["nocache"]) ? ($_GET["nocache"] == "true") : false);
 
+   $cache_id = rawurlencode($_SERVER['QUERY_STRING']);
+
+   if($cache && file_exists("cache/$cache_id") && ((time() - filemtime("cache/$cache_id")) < 3600))
+   {
+      echo file_get_contents("cache/$cache_id");
+      die();
+   }
+
+   if($cache)
+   {
+     ob_start();
+   }
+
    if($type == "html")
    {
       echo "<html>\n<head>\n<title></title>\n</head>\n<body>\n";
@@ -51,22 +65,8 @@ if(isset($_GET["url"]))
       ob_start();
    }
 
-   $cache_id = md5($url);
-
-   if($cache && file_exists("cache/$cache_id") && ((time() - filemtime("cache/$cache_id")) < 3600))
-   {
-      $feedtext = file_get_contents("cache/$cache_id");
-   }
-   else
-   {
-      $feedtext = file_get_contents($url, false, stream_context_create(array('http' => array('method' => "GET", 'header' => "Accept: application/rss+xml,*/*\r\n"))));
-      $feedtext = trim($feedtext);
-
-      if($cache)
-      {
-         file_put_contents("cache/$cache_id", $feedtext);
-      }
-   }
+   $feedtext = file_get_contents($url, false, stream_context_create(array('http' => array('method' => "GET", 'header' => "Accept: application/rss+xml,*/*\r\n"))));
+   $feedtext = trim($feedtext);
 
    if($fixbugs)
    {
@@ -192,6 +192,16 @@ if(isset($_GET["url"]))
 
       echo "$text\";\nsnode.parentNode.insertBefore(newele, snode);";
    }
+
+   if($cache)
+   {
+     $output = ob_get_contents();
+     ob_end_clean();
+     
+     file_put_contents("cache/$cache_id", $output);
+
+     echo $output;
+   }
 }
 else
 {
@@ -227,7 +237,7 @@ else
    <div id="bodywrap" class="bodywrap"></div>
 
     <h3>Latest News</h3>
-    <script id="feed-122179699713281" type="text/javascript" src="http://rss.bloople.net/?url=http%3A%2F%2Fblog.bloople.net%2Frss%2FRSS2HTML&amp;detail=30&amp;limit=3&amp;showtitle=false&amp;striphtml=true&amp;type=js&amp;id=122179699713281"></script>
+    <script id="feed-122179699713281" type="text/javascript" src="http://rss.bloople.net/?url=http%3A%2F%2Fblog.bloople.net%2Frss%2FRSS2HTML&amp;detail=10&amp;limit=3&amp;showtitle=false&amp;striphtml=true&amp;type=js&amp;id=122179699713281"></script>
 
     <hr class="p-after" />
     <h3>Welcome to RSS 2 HTML!</h3>
