@@ -235,10 +235,6 @@ else
 
 <div class="mainbody">
    <div id="bodywrap" class="bodywrap"></div>
-   
-   <div class="oz_quiz_notice">
-     <p>Like my <a href='http://blog.bloople.net/'>blog</a> <a href='http://kc.bloople.net/'>and</a> <a href='http://akc.bloople.net/'>my</a> <a href='http://json.bloople.net/'>other</a> <a href='http://rss.bloople.net/'>projects</a>? Support these projects and have some fun by <a href='http://itunes.com/apps/ozquiz'>checking out Oz Quiz</a>, a 600+ question Australian history &amp; popular culture quiz for the iPhone and iPod Touch I've co-developed.</p>
-   </div>
 
     <h3>Latest News</h3>
     <script id="feed-122179699713281" type="text/javascript" src="http://rss.bloople.net/?url=http%3A%2F%2Fblog.bloople.net%2Frss%2FRSS2HTML&amp;detail=10&amp;limit=3&amp;showtitle=false&amp;striphtml=true&amp;type=js&amp;id=122179699713281"></script>
