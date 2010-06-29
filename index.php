@@ -157,8 +157,7 @@ if(isset($_GET["url"]))
    
       $link = $item->get_elements_by_tagname("link");
       $link = (count($link) > 0 ? eschtml($link[0]->get_content()) : "");
-      $target = ($type == "html" ? " target=\"_blank\"" : "");
-      if($link != "") $title = "<a href=\"$link\"$target>$title</a>";
+      if($link != "") $title = "<a href=\"$link\" target=\"_top\">$title</a>";
    
       $desc = $item->get_elements_by_tagname("description");
       $desc = (count($desc) > 0 ? $desc[0]->get_content() : "");
