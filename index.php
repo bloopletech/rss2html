@@ -88,37 +88,41 @@ if(isset($_GET["url"]))
    $doc = new DOMDocument();
    $doc->loadXML($feedtext);
    
-   function findElementByTagName($tag, $context) {
-     $result = $context->getElementsByTagName($tag);
-     if($result->length > 0) return $result->item(0);
-     else return NULL;
+   function findChildByTagName($tag, $context) {
+     $children = $context->childNodes;
+
+     foreach($children as $child) {
+       if($child->nodeType == XML_ELEMENT_NODE && strtolower($child->tagName) == strtolower($tag)) return $child;
+     }
+
+     return NULL;
    }
 
    if($showtitle == true)
    {
-      $channel = findElementByTagName("channel", $doc);
+      $channel = findChildByTagName("channel", $doc);
    
-      $title = findElementByTagName("title", $channel);
+      $title = findChildByTagName("title", $channel);
       $title = eschtml(($title ? $titleprefix.$title->textContent : "(No feed title)"));
       if($titlereplacement) $title = $titlereplacement;
       if($striphtml) $title = remtags($title);
 
 
-      $link = findElementByTagName("link", $channel);
+      $link = findChildByTagName("link", $channel);
       $link = ($link ? ($eschtml ? eschtml($link->textContent) : $link->textContent) : "");
       if($link != "") $title = "<a href=\"$link\">$title</a>";
       if($striphtml) $link = remtags($link);
 
    
-      $desc = findElementByTagName("description", $channel);
+      $desc = findChildByTagName("description", $channel);
       $desc = eschtml($desc ? $desc->textContent : "");
       if($striphtml) $desc = remtags($desc);
 
    
-      $image = findElementByTagName("image", $channel);
+      $image = findChildByTagName("image", $channel);
       if($image)
       {
-         $image = findElementByTagName("url", $image);
+         $image = findChildByTagName("url", $image);
          $image = ($image ? $image->textContent : "");
       }
 
@@ -137,14 +141,14 @@ if(isset($_GET["url"]))
    {
       if($i == $limit) break;
 
-      $title = findElementByTagName("title", $item);
+      $title = findChildByTagName("title", $item);
       $title = ($title ? eschtml($title->textContent) : "(No title)");
    
-      $link = findElementByTagName("link", $item);
+      $link = findChildByTagName("link", $item);
       $link = ($link ? eschtml($link->textContent) : "");
       if($link != "") $title = "<a href=\"$link\" target=\"_top\">$title</a>";
    
-      $desc = findElementByTagName("description", $item);
+      $desc = findChildByTagName("description", $item);
       $desc = ($desc ? $desc->textContent : "");
       if($striphtml) $desc = remtags($desc);
       
