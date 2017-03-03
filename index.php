@@ -176,12 +176,7 @@ else {
 </div>
 
 <div class="mainbody">
-   <div id="bodywrap" class="bodywrap"></div>
-
-    <h3>Latest News</h3>
-    <script id="feed-122179699713281" type="text/javascript" src="http://rss.bloople.net/?url=http%3A%2F%2Fblog.bloople.net%2Frss%2FRSS2HTML&amp;detail=10&amp;limit=3&amp;showtitle=false&amp;striphtml=true&amp;type=js&amp;id=122179699713281"></script>
-
-    <hr class="p-after" />
+  <div id="bodywrap" class="bodywrap"></div>
     <h3>Welcome to RSS 2 HTML!</h3>
     <p class="mast">This page offers an easy way to embed RSS feeds in HTML webpages. One line of code in your webpage, and easily-styled HTML will be generated, with no advertisements or other restrictions.</p>
     <p class="mast">Use the form below to generate the code to include in your webpage:</p>
