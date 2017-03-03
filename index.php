@@ -2,15 +2,12 @@
 set_time_limit(240);
 ini_set("default_socket_timeout", 120);
 
-if(isset($_GET["url"]))
-{
-   function eschtml($str)
-   {
+if(isset($_GET["url"])) {
+   function eschtml($str) {
       return str_replace(array(">", "<", "\""), array("&gt;",  "&lt;", "&quot;"), $str);
    }
 
-   function remtags($str)
-   {
+   function remtags($str) {
       $str = html_entity_decode($str, ENT_COMPAT, "UTF-8");
       return strip_tags($str);
    }
@@ -35,12 +32,10 @@ if(isset($_GET["url"]))
    $fixbugs = (isset($_GET["fixbugs"]) ? ($_GET["fixbugs"] == "true") : false);
    $forceutf8 = (isset($_GET["forceutf8"]) ? ($_GET["forceutf8"] == "true") : false);
 
-   if($type == "html")
-   {
+   if($type == "html") {
       echo "<html>\n<head>\n<title></title>\n</head>\n<body>\n";
    }
-   else if($type == "js")
-   {
+   else if($type == "js") {
       echo "snode = document.getElementById(\"feed-$id\");\nnewele = document.createElement(\"div\");\nnewele.innerHTML = \"";
       ob_start();
    }
@@ -48,10 +43,8 @@ if(isset($_GET["url"]))
    $feedtext = file_get_contents($url, false, stream_context_create(array('http' => array('method' => "GET", 'header' => "Accept: application/rss+xml,*/*\r\n"))));
    $feedtext = trim($feedtext);
 
-   if($fixbugs)
-   {
+   if($fixbugs) {
       $feedtext = str_replace("& ", " &amp; ", $feedtext);
-
 
       $feedtext = str_replace("&x80;", "&euro;", $feedtext);
       $feedtext = str_replace("&x81;", "&lsquo;", $feedtext);
@@ -80,8 +73,7 @@ if(isset($_GET["url"]))
       $feedtext = str_replace("&x9F;", "&Yuml;", $feedtext);
    }
 
-   if($forceutf8)
-   {
+   if($forceutf8) {
       $feedtext = preg_replace("/<\?xml(.*?)encoding=['\"].*?['\"](.*?)\?>/m", "<?xml$1encoding=\"utf-8\"$2?>", $feedtext);
    }
 
@@ -98,19 +90,16 @@ if(isset($_GET["url"]))
      else return NULL;
    }
 
-   if($showtitle == true)
-   {
+   if($showtitle == true) {
       $title = xpath_text("/rss/channel/title");
       $title = eschtml((isset($title) ? $titleprefix.$title : "(No feed title)"));
       if($titlereplacement) $title = $titlereplacement;
       if($striphtml) $title = remtags($title);
 
-
       $link = xpath_text("/rss/channel/link");
       $link = ($link ? (isset($eschtml) ? eschtml($link) : $link) : "");
       if($link != "") $title = "<a href=\"$link\">$title</a>";
       if($striphtml) $link = remtags($link);
-
 
       $desc = xpath_text("/rss/channel/description");
       $desc = eschtml(isset($desc) ? $desc : "");
@@ -125,12 +114,9 @@ if(isset($_GET["url"]))
       if($showtitledesc && ($showempty || (!$showempty && $desc != ""))) echo "<p class=\"feed-desc\">$titledescprefix$desc</p>\n";
    }
 
-
-
    $items = $xpath->query("/rss/channel/item");
 
-   foreach($items as $i => $item)
-   {
+   foreach($items as $i => $item) {
       if($i == $limit) break;
 
       $title = xpath_text("./title", $item);
@@ -144,13 +130,10 @@ if(isset($_GET["url"]))
       $desc = (isset($desc) ? $desc : "");
       if($striphtml) $desc = remtags($desc);
 
-
       if($showempty || (!$showempty && $title != "")) echo "<h4 class=\"feed-item-title\">$itemtitleprefix$title</h4>\n";
-      if(($detail > 0) && ($showempty || (!$showempty && $desc != "")))
-      {
+      if(($detail > 0) && ($showempty || (!$showempty && $desc != ""))) {
          $words = explode(" ", $desc);
-         if(count($words) > $detail)
-         {
+         if(count($words) > $detail) {
             $words = array_slice($words, 0, $detail);
              $desc = implode(" ", $words)."...";
          }
@@ -160,12 +143,10 @@ if(isset($_GET["url"]))
 
    echo "<div class=\"rss2html-note\" style=\"float: right;\"><a href=\"http://rss.bloople.net/\" style=\"color: #000000;\">Powered by rss2html</a></div>\n<div class=\"rss2html-note-clear\" style=\"clear: right; height: 0;\"></div>\n";
 
-   if($type == "html")
-   {
+   if($type == "html") {
       echo "</body>\n</html>";
    }
-   else if($type == "js")
-   {
+   else if($type == "js") {
       $text = ob_get_contents();
       ob_end_clean();
 
@@ -174,8 +155,7 @@ if(isset($_GET["url"]))
       echo "$text\";\nsnode.parentNode.insertBefore(newele, snode);";
    }
 }
-else
-{
+else {
 ?>
 <!doctype html>
 <html>
