@@ -163,9 +163,6 @@ else {
 <title>RSS 2 HTML</title>
 <link rel="StyleSheet" type="text/css" href="style.css" />
 <script type="text/javascript" src="scripts/parse.js"></script>
-<!--[if lt IE 7]>
-<script defer type="text/javascript" src="scripts/pngfix.js"></script>
-<![endif]-->
 
 <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
 </head>
