@@ -88,34 +88,38 @@ if(isset($_GET["url"]))
    $doc = new DOMDocument();
    $doc->loadXML($feedtext);
    
+   function findElementByTagName($tag, $context) {
+     $result = $context->getElementsByTagName($tag);
+     if($result->length > 0) return $result->item(0);
+     else return NULL;
+   }
+
    if($showtitle == true)
    {
-      $channel = $doc->getElementsByTagName("channel");
-      $channel = $channel->item(0);
+      $channel = findElementByTagName("channel", $doc);
    
-      $title = $channel->getElementsByTagName("title");
-      $title = eschtml(($title->length > 0 ? $titleprefix.$title->item(0)->textContent : "(No feed title)"));
+      $title = findElementByTagName("title", $channel);
+      $title = eschtml(($title ? $titleprefix.$title->textContent : "(No feed title)"));
       if($titlereplacement) $title = $titlereplacement;
       if($striphtml) $title = remtags($title);
 
 
-      $link = $channel->getElementsByTagName("link");
-      $link = ($link->length ? ($eschtml ? eschtml($link->item(0)->textContent) : $link->item(0)->textContent) : "");
+      $link = findElementByTagName("link", $channel);
+      $link = ($link ? ($eschtml ? eschtml($link->textContent) : $link->textContent) : "");
       if($link != "") $title = "<a href=\"$link\">$title</a>";
       if($striphtml) $link = remtags($link);
 
    
-      $desc = $channel->getElementsByTagName("description");
-      $desc = eschtml($desc->length > 0 ? $desc->item(0)->textContent : "");
+      $desc = findElementByTagName("description", $channel);
+      $desc = eschtml($desc ? $desc->textContent : "");
       if($striphtml) $desc = remtags($desc);
 
    
-      $image = $channel->getElementsByTagName("image");
-      if($image->length > 0)
+      $image = findElementByTagName("image", $channel);
+      if($image)
       {
-         $image = $image->item(0);
-         $image = $image->getElementsByTagName("url");
-         $image = ($image->length > 0 ? $image->item(0)->textContent : "");
+         $image = findElementByTagName("url", $image);
+         $image = ($image ? $image->textContent : "");
       }
 
 
@@ -133,15 +137,15 @@ if(isset($_GET["url"]))
    {
       if($i == $limit) break;
 
-      $title = $item->getElementsByTagName("title");
-      $title = ($title->length > 0 ? eschtml($title->item(0)->textContent) : "(No title)");
+      $title = findElementByTagName("title", $item);
+      $title = ($title ? eschtml($title->textContent) : "(No title)");
    
-      $link = $item->getElementsByTagName("link");
-      $link = ($link->length > 0 ? eschtml($link->item(0)->textContent) : "");
+      $link = findElementByTagName("link", $item);
+      $link = ($link ? eschtml($link->textContent) : "");
       if($link != "") $title = "<a href=\"$link\" target=\"_top\">$title</a>";
    
-      $desc = $item->getElementsByTagName("description");
-      $desc = ($desc->length > 0 ? $desc->item(0)->textContent : "");
+      $desc = findElementByTagName("description", $item);
+      $desc = ($desc ? $desc->textContent : "");
       if($striphtml) $desc = remtags($desc);
       
    
