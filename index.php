@@ -98,7 +98,7 @@ if(isset($_GET["url"])) {
 
       $link = xpath_text("/rss/channel/link");
       $link = ($link ? (isset($eschtml) ? eschtml($link) : $link) : "");
-      if($link != "") $title = "<a href=\"$link\">$title</a>";
+      if($link != "") $title = "<a href=\"$link\" target=\"_blank\">$title</a>";
       if($striphtml) $link = remtags($link);
 
       $desc = xpath_text("/rss/channel/description");
@@ -124,7 +124,7 @@ if(isset($_GET["url"])) {
 
       $link = xpath_text("./link", $item);
       $link = (isset($link) ? eschtml($link) : "");
-      if($link != "") $title = "<a href=\"$link\" target=\"_top\">$title</a>";
+      if($link != "") $title = "<a href=\"$link\" target=\"_blank\">$title</a>";
 
       $desc = xpath_text("./description", $item);
       $desc = (isset($desc) ? $desc : "");
