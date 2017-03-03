@@ -139,7 +139,7 @@ if(isset($_GET["url"])) {
       }
    }
 
-   echo "<div class=\"rss2html-note\" style=\"float: right;\"><a href=\"http://rss.bloople.net/\" style=\"color: #000000;\">Powered by rss2html</a></div>\n<div class=\"rss2html-note-clear\" style=\"clear: right; height: 0;\"></div>\n";
+   echo "<div class=\"rss2html-note\" style=\"float: right;\"><a href=\"https://rss.bloople.net/\" style=\"color: #000000;\">Powered by rss2html</a></div>\n<div class=\"rss2html-note-clear\" style=\"clear: right; height: 0;\"></div>\n";
 
    if($type == "html") {
       echo "</body>\n</html>";

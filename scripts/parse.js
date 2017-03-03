@@ -79,12 +79,12 @@ function doParse()
    if($("codephp").checked) type = "php";
    if($("codehtml").checked) type = "html";
 
-   url = "http://rss.bloople.net/?url=" + encodeURIComponent($("url").value) + detail + limit + showtitle + showicon + showempty + striphtml + forceutf8 + fixbugs;
+   url = "//rss.bloople.net/?url=" + encodeURIComponent($("url").value) + detail + limit + showtitle + showicon + showempty + striphtml + forceutf8 + fixbugs;
    code = "";
 
    if(type == "php")
    {
-      code = "<?php\ninclude(\"" + url + "\");\nphp?>";
+      code = "<?php\ninclude(\"https:" + url + "\");\nphp?>";
    }
    else if(type == "js")
    {
