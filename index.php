@@ -1,9 +1,6 @@
 <?
 set_time_limit(240);
 ini_set("default_socket_timeout", 120);
-#ini_set("display_errors", "0");
-ini_set("display_errors", "1");
-set_magic_quotes_runtime(0);
 
 if(isset($_GET["url"]))
 {
@@ -37,23 +34,9 @@ if(isset($_GET["url"]))
    $showicon = (isset($_GET["showicon"]) ? ($_GET["showicon"] == "true") : false);
    $showempty = (isset($_GET["showempty"]) ? ($_GET["showempty"] == "true") : false);
    $type = (isset($_GET["type"]) ? $_GET["type"] : "php");
-   $id = (isset($_GET["id"]) ? ereg_replace("[^0-9]*", "", $_GET["id"]) : "");
+   $id = (isset($_GET["id"]) ? preg_replace("/[^0-9]*/", "", $_GET["id"]) : "");
    $fixbugs = (isset($_GET["fixbugs"]) ? ($_GET["fixbugs"] == "true") : false);
    $forceutf8 = (isset($_GET["forceutf8"]) ? ($_GET["forceutf8"] == "true") : false);
-   $cache = !(isset($_GET["nocache"]) ? ($_GET["nocache"] == "true") : false);
-
-   $cache_id = rawurlencode($_SERVER['QUERY_STRING']);
-
-   if($cache && file_exists("cache/$cache_id") && ((time() - filemtime("cache/$cache_id")) < 3600))
-   {
-      echo file_get_contents("cache/$cache_id");
-      die();
-   }
-
-   if($cache)
-   {
-     ob_start();
-   }
 
    if($type == "html")
    {
@@ -192,21 +175,11 @@ if(isset($_GET["url"]))
 
       echo "$text\";\nsnode.parentNode.insertBefore(newele, snode);";
    }
-
-   if($cache)
-   {
-     $output = ob_get_contents();
-     ob_end_clean();
-     
-     file_put_contents("cache/$cache_id", $output);
-
-     echo $output;
-   }
 }
 else
 {
 ?>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<!doctype html>
 <html>
 <head>
 <title>RSS 2 HTML</title>
@@ -221,15 +194,6 @@ else
 <body id="body">
 
 <div class="header">
-<div class="shoutboxcon"><a href="javascript:showShoutbox();" id="shoutboxlink">show shoutbox!</a>
-   <div id="shoutbox">
-      <!-- Begin Shoutbox - http://www.shoutmix.com -->
-      <iframe title="bloopletech" src="http://www.shoutmix.com/?bloopletech" width="160" height="400" frameborder="0" scrolling="auto">
-         <a href="http://www.shoutmix.com/?bloopletech">View shoutbox</a>
-      </iframe>
-      <!-- End Shoutbox -->
-   </div>
-</div>
 <img src="images/logo.png" alt="rss 2 html" />
 </div>
 
@@ -280,10 +244,6 @@ else
          <tr id="advfix">
             <td class="l">Attempt to convert Windows-1252 -&gt; UTF-8:</td>
             <td><input type="checkbox" name="fixbugs" id="fixbugs" /></td>
-         </tr>
-         <tr id="advnocache">
-            <td class="l">Disable caching:</td>
-            <td><input type="checkbox" name="nocache" id="nocache" /></td>
          </tr>
          <tr>
             <td class="l">Limit number of feed items shown:</td>

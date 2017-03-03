@@ -32,7 +32,6 @@ function showAdvanced()
       $("advembed").style.display = (msie ? "block" : "table-row");
       $("advforce").style.display = (msie ? "block" : "table-row");
       $("advfix").style.display = (msie ? "block" : "table-row");
-      $("advnocache").style.display = (msie ? "block" : "table-row");
 
       $("showopt").value = "less options";
    }
@@ -51,7 +50,6 @@ function showAdvanced()
       $("advforce").style.display = "none";
       $("advfix").style.display = (msie ? "block" : "table-row");
       $("advfix").style.display = "none";
-      $("advnocache").style.display = "none";
       $("codephp").checked = false;
       $("codejs").checked = false;
       $("codehtml").checked = false;
@@ -76,13 +74,12 @@ function doParse()
    striphtml = ($("striphtml").checked ? "&striphtml=true" : "");
    forceutf8 = ($("forceutf8").checked ? "&forceutf8=true" : "");
    fixbugs = ($("fixbugs").checked ? "&fixbugs=true" : "");
-   nocache = ($("nocache").checked ? "&nocache=true" : "");
 
    type = "js";
    if($("codephp").checked) type = "php";
    if($("codehtml").checked) type = "html";
 
-   url = "http://rss.bloople.net/?url=" + encodeURIComponent($("url").value) + detail + limit + showtitle + showicon + showempty + striphtml + forceutf8 + fixbugs + nocache;
+   url = "http://rss.bloople.net/?url=" + encodeURIComponent($("url").value) + detail + limit + showtitle + showicon + showempty + striphtml + forceutf8 + fixbugs;
    code = "";
 
    if(type == "php")
