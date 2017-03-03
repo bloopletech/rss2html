@@ -88,7 +88,7 @@ if(isset($_GET["url"]))
    $doc = new DOMDocument();
    $doc->loadXML($feedtext);
 
-   $xpath = new DOMXPath($document);
+   $xpath = new DOMXPath($doc);
 
    function findXpath($expression, $context = NULL) {
      global $xpath;
