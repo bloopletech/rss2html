@@ -90,34 +90,34 @@ if(isset($_GET["url"]))
 
    $xpath = new DOMXPath($doc);
 
-   function findXpath($expression, $context = NULL) {
+   function xpath_text($expression, $context = NULL) {
      global $xpath;
      
      $result = $xpath->query($expression, $context);
-     if($result->length > 0) return $result->item(0);
+     if($result->length > 0) return $result->item(0)->textContent;
      else return NULL;
    }
 
    if($showtitle == true)
    {
-      $title = findXpath("/rss/channel/title");
-      $title = eschtml(($title ? $titleprefix.$title->textContent : "(No feed title)"));
+      $title = xpath_text("/rss/channel/title");
+      $title = eschtml((isset($title) ? $titleprefix.$title : "(No feed title)"));
       if($titlereplacement) $title = $titlereplacement;
       if($striphtml) $title = remtags($title);
 
 
-      $link = findXpath("/rss/channel/link");
-      $link = ($link ? ($eschtml ? eschtml($link->textContent) : $link->textContent) : "");
+      $link = xpath_text("/rss/channel/link");
+      $link = ($link ? (isset($eschtml) ? eschtml($link) : $link) : "");
       if($link != "") $title = "<a href=\"$link\">$title</a>";
       if($striphtml) $link = remtags($link);
 
    
-      $desc = findXpath("/rss/channel/description");
-      $desc = eschtml($desc ? $desc->textContent : "");
+      $desc = xpath_text("/rss/channel/description");
+      $desc = eschtml(isset($desc) ? $desc : "");
       if($striphtml) $desc = remtags($desc);
 
-      $image = findXpath("/rss/channel/image/url");
-      $image = ($image ? $image->textContent : "");
+      $image = xpath_text("/rss/channel/image/url");
+      $image = (isset($image) ? $image : "");
 
       if($showicon && $image != "") $title = "<img class=\"feed-title-image\" src=\"$image\" />$title";
    
@@ -133,15 +133,15 @@ if(isset($_GET["url"]))
    {
       if($i == $limit) break;
 
-      $title = findXpath("./title", $item);
-      $title = ($title ? eschtml($title->textContent) : "(No title)");
+      $title = xpath_text("./title", $item);
+      $title = (isset($title) ? eschtml($title) : "(No title)");
    
-      $link = findXpath("./link", $item);
-      $link = ($link ? eschtml($link->textContent) : "");
+      $link = xpath_text("./link", $item);
+      $link = (isset($link) ? eschtml($link) : "");
       if($link != "") $title = "<a href=\"$link\" target=\"_top\">$title</a>";
    
-      $desc = findXpath("./description", $item);
-      $desc = ($desc ? $desc->textContent : "");
+      $desc = xpath_text("./description", $item);
+      $desc = (isset($desc) ? $desc : "");
       if($striphtml) $desc = remtags($desc);
       
    
