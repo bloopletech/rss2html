@@ -88,8 +88,7 @@ function doParse()
    }
    else if(type == "js")
    {
-      id = (new Date()).valueOf() + "" + Math.round(Math.random() * 1000);
-      code = "<script id=\"feed-" + id + "\" type=\"text/javascript\" src=\"" + url + "&type=js&id=" + id + "\"></script>";
+      code = "<script src=\"" + url + "&type=js\"></script>";
    }
    else if(type == "html")
    {

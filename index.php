@@ -12,8 +12,6 @@ if(isset($_GET["url"])) {
       return strip_tags($str);
    }
 
-   header("Content-Type: text/html; charset=utf-8");
-
    $url = $_GET["url"];
    $detail = (isset($_GET["detail"]) ? intval($_GET["detail"]) : 2147483647);
    $limit = (isset($_GET["limit"]) ? $_GET["limit"] : 2147483647);
@@ -28,15 +26,15 @@ if(isset($_GET["url"])) {
    $showicon = (isset($_GET["showicon"]) ? ($_GET["showicon"] == "true") : false);
    $showempty = (isset($_GET["showempty"]) ? ($_GET["showempty"] == "true") : false);
    $type = (isset($_GET["type"]) ? $_GET["type"] : "php");
-   $id = (isset($_GET["id"]) ? preg_replace("/[^0-9]*/", "", $_GET["id"]) : "");
    $fixbugs = (isset($_GET["fixbugs"]) ? ($_GET["fixbugs"] == "true") : false);
    $forceutf8 = (isset($_GET["forceutf8"]) ? ($_GET["forceutf8"] == "true") : false);
 
    if($type == "html") {
+      header("Content-Type: text/html; charset=utf-8");
       echo "<html>\n<head>\n<title></title>\n</head>\n<body>\n";
    }
    else if($type == "js") {
-      echo "snode = document.getElementById(\"feed-$id\");\nnewele = document.createElement(\"div\");\nnewele.innerHTML = \"";
+      header("Content-Type: text/javascript; charset=utf-8");
       ob_start();
    }
 
@@ -152,7 +150,18 @@ if(isset($_GET["url"])) {
 
       $text = str_replace("\n", "", str_replace("\"", "\\\"", $text));
 
-      echo "$text\";\nsnode.parentNode.insertBefore(newele, snode);";
+?>
+var container = document.createElement("div");
+container.innerHTML = "<?= $text ?>";
+var nodes = [].slice.call(container.childNodes);
+
+var script = document.scripts[document.scripts.length - 1];
+var parent = script.parentNode;
+
+while(nodes.length > 0) parent.insertBefore(nodes.shift(), script);
+
+parent.removeChild(script);
+<?
    }
 }
 else {
