@@ -15,9 +15,6 @@ if(isset($_GET["url"]))
       return strip_tags($str);
    }
 
-   if(version_compare(PHP_VERSION,'5','>='))
-      require_once('domxml45.php');
-
    header("Content-Type: text/html; charset=utf-8");
    
    $url = $_GET["url"];
@@ -88,36 +85,37 @@ if(isset($_GET["url"]))
       $feedtext = preg_replace("/<\?xml(.*?)encoding=['\"].*?['\"](.*?)\?>/m", "<?xml$1encoding=\"utf-8\"$2?>", $feedtext);
    }
    
-   $doc = domxml_open_mem($feedtext);
+   $doc = new DOMDocument();
+   $doc->loadXML($feedtext);
    
    if($showtitle == true)
    {
-      $channel = $doc->get_elements_by_tagname("channel");
-      $channel = $channel[0];
+      $channel = $doc->getElementsByTagName("channel");
+      $channel = $channel->item(0);
    
-      $title = $channel->get_elements_by_tagname("title");
-      $title = eschtml((count($title) > 0 ? $titleprefix.$title[0]->get_content() : "(No feed title)"));
+      $title = $channel->getElementsByTagName("title");
+      $title = eschtml(($title->length > 0 ? $titleprefix.$title->item(0)->textContent : "(No feed title)"));
       if($titlereplacement) $title = $titlereplacement;
       if($striphtml) $title = remtags($title);
 
 
-      $link = $channel->get_elements_by_tagname("link");
-      $link = (count($link) > 0 ? ($eschtml ? eschtml($link[0]->get_content()) : $link[0]->get_content()) : "");
+      $link = $channel->getElementsByTagName("link");
+      $link = ($link->length ? ($eschtml ? eschtml($link->item(0)->textContent) : $link->item(0)->textContent) : "");
       if($link != "") $title = "<a href=\"$link\">$title</a>";
       if($striphtml) $link = remtags($link);
 
    
-      $desc = $channel->get_elements_by_tagname("description");
-      $desc = eschtml(count($desc) > 0 ? $desc[0]->get_content() : "");
+      $desc = $channel->getElementsByTagName("description");
+      $desc = eschtml($desc->length > 0 ? $desc->item(0)->textContent : "");
       if($striphtml) $desc = remtags($desc);
 
    
-      $image = $channel->get_elements_by_tagname("image");
-      if(count($image) > 0)
+      $image = $channel->getElementsByTagName("image");
+      if($image->length > 0)
       {
-         $image = $image[0];
-         $image = $image ->get_elements_by_tagname("url");
-         $image = (count($image) > 0 ? $image[0]->get_content() : "");
+         $image = $image->item(0);
+         $image = $image->getElementsByTagName("url");
+         $image = ($image->length > 0 ? $image->item(0)->textContent : "");
       }
 
 
@@ -129,21 +127,21 @@ if(isset($_GET["url"]))
    
       
       
-   $items = $doc->get_elements_by_tagname("item");
+   $items = $doc->getElementsByTagName("item");
    
    foreach($items as $i => $item)
    {
       if($i == $limit) break;
 
-      $title = $item->get_elements_by_tagname("title");
-      $title = (count($title) > 0 ? eschtml($title[0]->get_content()) : "(No title)");
+      $title = $item->getElementsByTagName("title");
+      $title = ($title->length > 0 ? eschtml($title->item(0)->textContent) : "(No title)");
    
-      $link = $item->get_elements_by_tagname("link");
-      $link = (count($link) > 0 ? eschtml($link[0]->get_content()) : "");
+      $link = $item->getElementsByTagName("link");
+      $link = ($link->length > 0 ? eschtml($link->item(0)->textContent) : "");
       if($link != "") $title = "<a href=\"$link\" target=\"_top\">$title</a>";
    
-      $desc = $item->get_elements_by_tagname("description");
-      $desc = (count($desc) > 0 ? $desc[0]->get_content() : "");
+      $desc = $item->getElementsByTagName("description");
+      $desc = ($desc->length > 0 ? $desc->item(0)->textContent : "");
       if($striphtml) $desc = remtags($desc);
       
    
