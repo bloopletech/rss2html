@@ -250,7 +250,7 @@ else {
       <div class="clear"></div>
       <hr />
    </form>
-   <div class="footer">Check out my portfolio at <a href="http://i.bloople.net">i.bloople.net</a>. &copy; Brenton Fletcher. Comments? e-mail me: <a href="mailto:i@bloople.net">i@bloople.net</a>.</div>
+   <div class="footer">&copy; Brenton Fletcher. Comments? e-mail me: <a href="mailto:i@bloople.net">i@bloople.net</a>.</div>
 </div>
 </body>
 </html>
