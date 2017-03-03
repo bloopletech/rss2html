@@ -87,45 +87,37 @@ if(isset($_GET["url"]))
    
    $doc = new DOMDocument();
    $doc->loadXML($feedtext);
-   
-   function findChildByTagName($tag, $context) {
-     $children = $context->childNodes;
 
-     foreach($children as $child) {
-       if($child->nodeType == XML_ELEMENT_NODE && strtolower($child->tagName) == strtolower($tag)) return $child;
-     }
+   $xpath = new DOMXPath($document);
 
-     return NULL;
+   function findXpath($expression, $context = NULL) {
+     global $xpath;
+     
+     $result = $xpath->query($expression, $context);
+     if($result->length > 0) return $result->item(0);
+     else return NULL;
    }
 
    if($showtitle == true)
    {
-      $channel = findChildByTagName("channel", $doc);
-   
-      $title = findChildByTagName("title", $channel);
+      $title = findXpath("/rss/channel/title");
       $title = eschtml(($title ? $titleprefix.$title->textContent : "(No feed title)"));
       if($titlereplacement) $title = $titlereplacement;
       if($striphtml) $title = remtags($title);
 
 
-      $link = findChildByTagName("link", $channel);
+      $link = findXpath("/rss/channel/link");
       $link = ($link ? ($eschtml ? eschtml($link->textContent) : $link->textContent) : "");
       if($link != "") $title = "<a href=\"$link\">$title</a>";
       if($striphtml) $link = remtags($link);
 
    
-      $desc = findChildByTagName("description", $channel);
+      $desc = findXpath("/rss/channel/description");
       $desc = eschtml($desc ? $desc->textContent : "");
       if($striphtml) $desc = remtags($desc);
 
-   
-      $image = findChildByTagName("image", $channel);
-      if($image)
-      {
-         $image = findChildByTagName("url", $image);
-         $image = ($image ? $image->textContent : "");
-      }
-
+      $image = findXpath("/rss/channel/image/url");
+      $image = ($image ? $image->textContent : "");
 
       if($showicon && $image != "") $title = "<img class=\"feed-title-image\" src=\"$image\" />$title";
    
@@ -135,20 +127,20 @@ if(isset($_GET["url"]))
    
       
       
-   $items = $doc->getElementsByTagName("item");
+   $items = $xpath->query("/rss/channel/item");
    
    foreach($items as $i => $item)
    {
       if($i == $limit) break;
 
-      $title = findChildByTagName("title", $item);
+      $title = findXpath("./title", $item);
       $title = ($title ? eschtml($title->textContent) : "(No title)");
    
-      $link = findChildByTagName("link", $item);
+      $link = findXpath("./link", $item);
       $link = ($link ? eschtml($link->textContent) : "");
       if($link != "") $title = "<a href=\"$link\" target=\"_top\">$title</a>";
    
-      $desc = findChildByTagName("description", $item);
+      $desc = findXpath("./description", $item);
       $desc = ($desc ? $desc->textContent : "");
       if($striphtml) $desc = remtags($desc);
       
