@@ -16,7 +16,7 @@ if(isset($_GET["url"]))
    }
 
    header("Content-Type: text/html; charset=utf-8");
-   
+
    $url = $_GET["url"];
    $detail = (isset($_GET["detail"]) ? intval($_GET["detail"]) : 2147483647);
    $limit = (isset($_GET["limit"]) ? $_GET["limit"] : 2147483647);
@@ -51,8 +51,8 @@ if(isset($_GET["url"]))
    if($fixbugs)
    {
       $feedtext = str_replace("& ", " &amp; ", $feedtext);
-      
-      
+
+
       $feedtext = str_replace("&x80;", "&euro;", $feedtext);
       $feedtext = str_replace("&x81;", "&lsquo;", $feedtext);
       $feedtext = str_replace("&x85;", "&hellip;", $feedtext);
@@ -84,7 +84,7 @@ if(isset($_GET["url"]))
    {
       $feedtext = preg_replace("/<\?xml(.*?)encoding=['\"].*?['\"](.*?)\?>/m", "<?xml$1encoding=\"utf-8\"$2?>", $feedtext);
    }
-   
+
    $doc = new DOMDocument();
    $doc->loadXML($feedtext);
 
@@ -92,7 +92,7 @@ if(isset($_GET["url"]))
 
    function xpath_text($expression, $context = NULL) {
      global $xpath;
-     
+
      $result = $xpath->query($expression, $context);
      if($result->length > 0) return $result->item(0)->textContent;
      else return NULL;
@@ -111,7 +111,7 @@ if(isset($_GET["url"]))
       if($link != "") $title = "<a href=\"$link\">$title</a>";
       if($striphtml) $link = remtags($link);
 
-   
+
       $desc = xpath_text("/rss/channel/description");
       $desc = eschtml(isset($desc) ? $desc : "");
       if($striphtml) $desc = remtags($desc);
@@ -120,31 +120,31 @@ if(isset($_GET["url"]))
       $image = (isset($image) ? $image : "");
 
       if($showicon && $image != "") $title = "<img class=\"feed-title-image\" src=\"$image\" />$title";
-   
+
       if($showempty || (!$showempty && $title != "")) echo "<h3 class=\"feed-title\">$title</h3>\n";
       if($showtitledesc && ($showempty || (!$showempty && $desc != ""))) echo "<p class=\"feed-desc\">$titledescprefix$desc</p>\n";
    }
-   
-      
-      
+
+
+
    $items = $xpath->query("/rss/channel/item");
-   
+
    foreach($items as $i => $item)
    {
       if($i == $limit) break;
 
       $title = xpath_text("./title", $item);
       $title = (isset($title) ? eschtml($title) : "(No title)");
-   
+
       $link = xpath_text("./link", $item);
       $link = (isset($link) ? eschtml($link) : "");
       if($link != "") $title = "<a href=\"$link\" target=\"_top\">$title</a>";
-   
+
       $desc = xpath_text("./description", $item);
       $desc = (isset($desc) ? $desc : "");
       if($striphtml) $desc = remtags($desc);
-      
-   
+
+
       if($showempty || (!$showempty && $title != "")) echo "<h4 class=\"feed-item-title\">$itemtitleprefix$title</h4>\n";
       if(($detail > 0) && ($showempty || (!$showempty && $desc != "")))
       {
