@@ -1,115 +1,52 @@
-//Code copyright (c) Brenton Fletcher 2006-2007.
-//Check out my portfolio at http://i.budgetwebdesign.org
+$ = document.getElementById.bind(document);
 
-var msie = (document.all && !window.opera)
-
-function $(ele)
-{
-   var t = document.getElementById(ele);
-   if(t == null) t = document.getElementsByName(ele);
-   if(t.length == 1) t = t.item(0);
-   return t;
+function showAdvanced() {
+   document.body.classList.toggle("show-advanced");
+   $("showopt").value = document.body.classList.contains("show-advanced") ? "Less options" : "More options";
 }
 
-function escapeHTML(str)
-{
-   //code portion borrowed from prototype library
-   var div = document.createElement('div');
-   var text = document.createTextNode(str);
-   div.appendChild(text);
-   return div.innerHTML;
-   //end portion
-}
-
-function showAdvanced()
-{
-   if($("showopt").value == "more options")
-   {
-      $("advtitle").style.display = (msie ? "block" : "table-row");
-      $("advicon").style.display = (msie ? "block" : "table-row");
-      $("advshow").style.display = (msie ? "block" : "table-row");
-      $("advstrip").style.display = (msie ? "block" : "table-row");
-      $("advembed").style.display = (msie ? "block" : "table-row");
-      $("advforce").style.display = (msie ? "block" : "table-row");
-      $("advfix").style.display = (msie ? "block" : "table-row");
-
-      $("showopt").value = "less options";
-   }
-   else
-   {
-      $("advtitle").style.display = "none";
-      $("advtitle").checked = false;
-      $("advicon").style.display = "none";
-      $("advicon").checked = false;
-      $("advshow").style.display = "none";
-      $("advshow").checked = false;
-      $("advstrip").style.display = "none";
-      $("advstrip").checked = false;
-      $("advembed").style.display = "none";
-      $("advforce").style.display = (msie ? "block" : "table-row");
-      $("advforce").style.display = "none";
-      $("advfix").style.display = (msie ? "block" : "table-row");
-      $("advfix").style.display = "none";
-      $("codephp").checked = false;
-      $("codejs").checked = false;
-      $("codehtml").checked = false;
-
-      $("showopt").value = "more options";
-   }
-}
-   
-
-function doParse()
-{
-   detail = "";
+function doParse() {
+   var detail = "";
    if($("detailhide").checked) detail = "&detail=-1";
    if($("detailshow").checked) detail = "&detail=" + $("detailnum").value;
 
-   limit = "";
-   if($("limitsome").checked) limit = "&limit=" + $("limitnum").value;
+   var limit = $("limit").checked ? ("&limit=" + $("limitnum").value) : "";
 
-   showtitle = ($("showtitle").checked ? "" : "&showtitle=false");
-   showicon = ($("showicon").checked ? "&showicon=true" : "");
-   showempty = ($("showempty").checked ? "&showempty=true" : "");
-   striphtml = ($("striphtml").checked ? "&striphtml=true" : "");
-   forceutf8 = ($("forceutf8").checked ? "&forceutf8=true" : "");
-   fixbugs = ($("fixbugs").checked ? "&fixbugs=true" : "");
+   var advanced = document.body.classList.contains("show-advanced");
+   var showtitle = (advanced && $("showtitle").checked ? "" : "&showtitle=false");
+   var showicon = (advanced && $("showicon").checked ? "&showicon=true" : "");
+   var showempty = (advanced && $("showempty").checked ? "&showempty=true" : "");
+   var striphtml = (advanced && $("striphtml").checked ? "&striphtml=true" : "");
+   var forceutf8 = (advanced && $("forceutf8").checked ? "&forceutf8=true" : "");
+   var fixbugs = (advanced && $("fixbugs").checked ? "&fixbugs=true" : "");
 
-   type = "js";
-   if($("codephp").checked) type = "php";
-   if($("codehtml").checked) type = "html";
+   var path = "/?url=" + encodeURIComponent($("url").value) + detail + limit + showtitle + showicon + showempty + striphtml + forceutf8 + fixbugs;
+   var url = "//rss.bloople.net" + path;
+   var code = "";
 
-   url = "//rss.bloople.net/?url=" + encodeURIComponent($("url").value) + detail + limit + showtitle + showicon + showempty + striphtml + forceutf8 + fixbugs;
-   code = "";
+   var type = $("form").elements["codegen"].value;
+   if(type == "php") code = "<?php\ninclude(\"https:" + url + "\");\nphp?>";
+   else if(type == "js") code = "<script src=\"" + url + "&type=js\"></script>";
+   else if(type == "html") code = "<iframe src=\"" + url + "&type=html\"></iframe>";
 
-   if(type == "php")
-   {
-      code = "<?php\ninclude(\"https:" + url + "\");\nphp?>";
-   }
-   else if(type == "js")
-   {
-      code = "<script src=\"" + url + "&type=js\"></script>";
-   }
-   else if(type == "html")
-   {
-      code = "<iframe src=\"" + url + "&type=html\"></iframe>";
-   }
-
-   $("codeoutwrap").style.display = (msie ? "block" : "table-row");
-   $("stylingwrap").style.display = (msie ? "block" : "table-row");
    $("codeout").value = code;
+   $("live-example").src = path;
+
+   document.body.classList.add("submitted");
+
+   return false;
 }
 
-function clearPage()
-{
-   $("codeoutwrap").style.display = "none";
-   $("stylingwrap").style.display = "none";
-   $("url").focus();
-}
+window.onload = function() {
+  $("form").onsubmit = doParse;
 
-function load()
-{
-   $("url").focus();
-}
+  $("limitnum").onclick = function() {
+    $("limit").checked = true;
+  };
 
-window.onload = load;
+  $("detailnum").onclick = function() {
+    $("detailshow").checked = true;
+  };
+
+  $("url").focus();
+};

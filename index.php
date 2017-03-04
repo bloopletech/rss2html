@@ -187,85 +187,152 @@ else {
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
   </head>
   <body id="body">
-    <div class="header">
-      <img src="images/logo.png" alt="rss 2 html">
-    </div>
+    <header>
+      <h1>RSS 2 HTML</h1>
+    </header>
 
-    <div class="mainbody">
-      <div id="bodywrap" class="bodywrap"></div>
+    <div id="mainbody">
         <h3>Welcome to RSS 2 HTML!</h3>
         <p class="mast">This page offers an easy way to embed RSS feeds in HTML webpages. One line of code in your webpage, and easily-styled HTML will be generated, with no advertisements or other restrictions.</p>
         <p class="mast">Use the form below to generate the code to include in your webpage:</p>
-        <div class="clear"></div>
 
-        <form onsubmit="doParse(); return false;">
+        <form id="form">
           <table>
              <tr>
                 <td class="l">URL of RSS feed:</td>
                 <td><input class="text" type="text" name="url" id="url"></td>
              </tr>
-             <tr id="advtitle">
-                <td class="l">Show feed title:</td>
-                <td><input type="checkbox" name="showtitle" id="showtitle"></td>
+             <tr class="advanced" id="advtitle">
+                <td class="l"></td>
+                <td>
+                  <label for="showtitle">
+                    <input type="checkbox" name="showtitle" id="showtitle">
+                    Show feed title
+                  </label>
+                </td>
              </tr>
-             <tr id="advicon">
-                <td class="l">Show feed icon:</td>
-                <td><input type="checkbox" name="showicon" id="showicon"></td>
+             <tr class="advanced" id="advicon">
+                <td class="l"></td>
+                <td>
+                  <label for="showicon">
+                    <input type="checkbox" name="showicon" id="showicon">
+                    Show feed icon
+                  </label>
+                </td>
              </tr>
              <tr>
                 <td class="l">Length of feed item descriptions:</td>
-                <td><input type="radio" name="detail" id="detailhide" value="-1"> Hide descriptions<br>
-                    <input type="radio" name="detail" id="detailshow" value="0"> Show up to <input class="num" type="text" name="detailnum" onclick="$('detailshow').checked = true;"> words.<br>
-                    <input type="radio" name="detail" id="detailnolimit" value="1"> Don't limit length.</td>
+                <td>
+                  <label for="detailhide">
+                    <input type="radio" name="detail" id="detailhide" value="-1">
+                    Hide descriptions
+                  </label>
+                  <label for="detailshow">
+                    <input type="radio" name="detail" id="detailshow" value="0">
+                    Show up to <input class="num" type="text" id="detailnum"> words
+                  </label>
+                  <label id="detailnolimit">
+                    <input type="radio" name="detail" id="detailnolimit" value="1">
+                    Don't limit length
+                  </label>
+                </td>
              </tr>
-             <tr id="advshow">
-                <td class="l">Output HTML for empty feed titles and descriptions:</td>
-                <td><input type="checkbox" name="showempty" id="showempty"></td>
+             <tr class="advanced" id="advshow">
+                <td class="l"></td>
+                <td>
+                  <label for="showempty">
+                    <input type="checkbox" name="showempty" id="showempty">
+                    Output HTML for empty feed titles and descriptions
+                  </label>
+                </td>
              </tr>
-             <tr id="advstrip">
-                <td class="l">Strip HTML from feed item descriptions:</td>
-                <td><input type="checkbox" name="striphtml" id="striphtml"></td>
+             <tr class="advanced" id="advstrip">
+                <td class="l"></td>
+                <td>
+                  <label for="striphtml">
+                    <input type="checkbox" name="striphtml" id="striphtml">
+                    Strip HTML from feed item descriptions
+                  </label>
+                </td>
              </tr>
-             <tr id="advforce">
-                <td class="l">Assume RSS feed is UTF-8, ignoring XML prolog:</td>
-                <td><input type="checkbox" name="forceutf8" id="forceutf8"></td>
+             <tr class="advanced" id="advforce">
+                <td class="l"></td>
+                <td>
+                  <label for="forceutf8">
+                    <input type="checkbox" name="forceutf8" id="forceutf8">
+                    Assume RSS feed is UTF-8, ignoring XML prolog
+                  </label>
+                </td>
              </tr>
-             <tr id="advfix">
-                <td class="l">Attempt to convert Windows-1252 -&gt; UTF-8:</td>
-                <td><input type="checkbox" name="fixbugs" id="fixbugs"></td>
+             <tr class="advanced" id="advfix">
+                <td class="l"></td>
+                <td>
+                  <label for="fixbugs">
+                    <input type="checkbox" name="fixbugs" id="fixbugs">
+                    Attempt to convert Windows-1252 -&gt; UTF-8
+                  </label>
+                </td>
              </tr>
              <tr>
-                <td class="l">Limit number of feed items shown:</td>
-                <td><input type="radio" name="limit" id="limitnone" value="-1"> No limit<br>
-                    <input type="radio" name="limit" id="limitsome" value="0"> Limit to the first <input class="num" type="text" name="limitnum" onclick="$('limitsome').checked = true;"> items.</td>
+                <td class="l"></td>
+                <td>
+                  <label for="limit">
+                    <input type="checkbox" name="limit" id="limit">
+                    Limit to the first <input class="num" type="text" id="limitnum"> items in the feed
+                  </label>
+                </td>
              </tr>
-             <tr id="advembed">
+             <tr class="advanced" id="advembed">
                 <td class="l">How should the feed be embedded in your webpage:</td>
-                <td><input type="radio" name="codegen" id="codephp" value="php"> PHP code - this option will only work if your webpage is already coded in PHP.<br>
-                    <input type="radio" name="codegen" id="codejs" value="js" checked="checked"> JavaScript code - this option is best if you want to style the embedded feed.<br>
-                    <input type="radio" name="codegen" id="codehtml" value="html"> HTML code that generates an iframe - this option is best if the people using your website don't have JavaScript enabled.</td>
+                <td>
+                  <label for="codejs">
+                    <input type="radio" name="codegen" value="js" id="codejs" checked="checked">
+                    JavaScript code - this option is best if you want to style the embedded feed.
+                  </label>
+                  <label for="codehtml">
+                    <input type="radio" name="codegen" id="codehtml" value="html">
+                    &lt;iframe&gt; embed - this option is best if the people using your website don't have JavaScript enabled.
+                  </label>
+                  <label for="codephp">
+                    <input type="radio" name="codegen" id="codephp" value="php">
+                    PHP code - this option will only work if your webpage is already coded in PHP.
+                  </label>
+                </td>
              </tr>
-             <tr id="codeoutwrap">
+             <tr class="results">
                 <td class="l">Embed this code in your webpage:</td>
                 <td><textarea id="codeout"></textarea></td>
              </tr>
-             <tr id="stylingwrap">
-                <td class="l">Styling the output:</td>
-                <td><p>The HTML generated by this code contains CSS hooks so you can style the output in your stylesheet.<br>
-                    The title of the feed is displayed in a h3 element, with the class feed-title.<br>
-                    The feed description is displayed in a p tag with class feed-desc.<br>
-                    The feed icon is displayed in an img with class feed-title-image.<br>
-                    Each feed item title is displayed in a h4 with class feed-item-title.<br>
-                    Each feed item description is displayed in a p tag with class feed-item-desc.</p>
-                    <p>Note that this code does not generate HTML for empty feed titles, descriptions, etc.
-                    If you want empty HTML to be generated, click "more options" and tick the "Output HTML for empty..." checkbox.</p></td>
+             <tr class="results">
+               <td class="l">Live example:</td>
+               <td>
+                 <iframe id="live-example"></iframe>
+               </td>
+             </tr>
+             <tr>
+               <td colspan="2" class="actions">
+                 <input type="button" id="showopt" value="More options" onclick="showAdvanced();">
+                 <input type="submit" id="submit" value="Submit &amp; get code">
+               </td>
              </tr>
           </table>
-          <div class="rfloat"><input type="button" id="showopt" value="more options" onclick="showAdvanced();"> <input type="submit" id="submit" value="submit &amp; get code" onclick="doParse(); return false;"></div>
-          <div class="lfloat"><input type="reset" id="reset" value="reset" onclick="clearPage();"></div>
-          <div class="clear"></div>
-          <hr>
        </form>
+
+       <h3>Styling the output</h3>
+       <p>
+         The HTML generated by this code contains CSS hooks so you can style the output in your stylesheet.<br>
+         The title of the feed is displayed in a <code>&lt;h3&gt;</code> tag, with the class <code>feed-title</code>.<br>
+         The feed description is displayed in a <code>&lt;p&gt;</code> tag with class <code>feed-desc</code>.<br>
+         The feed icon is displayed in an <code>&lt;img&gt;</code> tag with class <code>feed-title-image</code>.<br>
+         Each feed item title is displayed in a <code>&lt;h4&gt;</code> tag with class <code>feed-item-title</code>.<br>
+         Each feed item description is displayed in a <code>&lt;p&gt;</code> tag with class <code>feed-item-desc</code>.
+       </p>
+       <p>
+         Note that this code does not generate HTML for empty feed titles, descriptions, etc.<br>
+         If you want empty HTML to be generated, click "more options" and tick the "Output HTML for empty..." checkbox.
+       </p>
+
+       <hr>
        <div class="footer">&copy; Brenton Fletcher. Comments? e-mail me: <a href="mailto:i@bloople.net">i@bloople.net</a>.</div>
     </div>
   </body>
