@@ -78,33 +78,32 @@ if(isset($_GET["url"])) {
    $doc = new DOMDocument();
    $doc->loadXML($feedtext);
 
-   $xpath = new DOMXPath($doc);
+   function search($tag, $context, $single = true) {
+     $nodes = $context->getElementsByTagName($tag);
 
-   function xpath_text($expression, $context = NULL) {
-     global $xpath;
-
-     $result = $xpath->query($expression, $context);
-     if($result->length > 0) return $result->item(0)->textContent;
-     else return NULL;
+     if($nodes->length > 0) return $single ? $nodes->item(0) : $nodes;
+     return NULL;
    }
 
    if($showtitle == true) {
-      $title = xpath_text("/rss/channel/title");
-      $title = eschtml((isset($title) ? $titleprefix.$title : "(No feed title)"));
+      $channel = search("channel", $doc);
+
+      $title = search("title", $channel);
+      $title = eschtml((isset($title) ? $titleprefix.$title->textContent : "(No feed title)"));
       if($titlereplacement) $title = $titlereplacement;
       if($striphtml) $title = remtags($title);
 
-      $link = xpath_text("/rss/channel/link");
-      $link = ($link ? (isset($eschtml) ? eschtml($link) : $link) : "");
+      $link = search("link", $channel);
+      $link = ($link ? (isset($eschtml) ? eschtml($link->textContent) : $link->textContent) : "");
       if($link != "") $title = "<a href=\"$link\" target=\"_blank\">$title</a>";
       if($striphtml) $link = remtags($link);
 
-      $desc = xpath_text("/rss/channel/description");
-      $desc = eschtml(isset($desc) ? $desc : "");
+      $desc = search("description", $channel);
+      $desc = eschtml(isset($desc) ? $desc->textContent : "");
       if($striphtml) $desc = remtags($desc);
 
-      $image = xpath_text("/rss/channel/image/url");
-      $image = (isset($image) ? $image : "");
+      $image = search("url", $channel);
+      $image = (isset($image) ? $image->textContent : "");
 
       if($showicon && $image != "") $title = "<img class=\"feed-title-image\" src=\"$image\">$title";
 
@@ -112,20 +111,20 @@ if(isset($_GET["url"])) {
       if($showtitledesc && ($showempty || (!$showempty && $desc != ""))) echo "<p class=\"feed-desc\">$titledescprefix$desc</p>\n";
    }
 
-   $items = $xpath->query("/rss/channel/item");
+   $items = search("item", $doc, false);
 
    foreach($items as $i => $item) {
       if($i == $limit) break;
 
-      $title = xpath_text("./title", $item);
-      $title = (isset($title) ? eschtml($title) : "(No title)");
+      $title = search("title", $item);
+      $title = (isset($title) ? eschtml($title->textContent) : "(No title)");
 
-      $link = xpath_text("./link", $item);
-      $link = (isset($link) ? eschtml($link) : "");
+      $link = search("link", $item);
+      $link = (isset($link) ? eschtml($link->textContent) : "");
       if($link != "") $title = "<a href=\"$link\" target=\"_blank\">$title</a>";
 
-      $desc = xpath_text("./description", $item);
-      $desc = (isset($desc) ? $desc : "");
+      $desc = search("description", $item);
+      $desc = (isset($desc) ? $desc->textContent : "");
       if($striphtml) $desc = remtags($desc);
 
       if($showempty || (!$showempty && $title != "")) echo "<h4 class=\"feed-item-title\">$itemtitleprefix$title</h4>\n";
