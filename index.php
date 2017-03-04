@@ -38,7 +38,18 @@ if(isset($_GET["url"])) {
       ob_start();
    }
 
-   $feedtext = file_get_contents($url, false, stream_context_create(array('http' => array('method' => "GET", 'header' => "Accept: application/rss+xml,*/*\r\n"))));
+   $headers = "Connection: close\r\n".
+     "User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36\r\n".
+     "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\n".
+     "Accept-Language: en-us,en;q=0.5\r\n".
+     "Referer: /\r\n";
+
+   $http_context = array(
+     'protocol_version' => 1.1,
+     'method' => 'GET',
+     'header' => $headers
+   );
+   $feedtext = file_get_contents($url, false, stream_context_create(array('http' => $http_context)));
    $feedtext = trim($feedtext);
 
    if($fixbugs) {
