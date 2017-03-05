@@ -90,6 +90,12 @@ table {
   margin-bottom: 20px;
 }
 
+@media screen and (max-width: 839px) {
+  table {
+    width: 100%;
+  }
+}
+
 table, tr, td {
   border: none;
 }
@@ -118,7 +124,7 @@ input.num { width: 3em; }
 
 body.show-advanced .advanced td {
   display: table-cell;
-} 
+}
 
 body.submitted .results td {
   display: table-cell;
